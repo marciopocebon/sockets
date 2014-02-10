@@ -1,0 +1,9 @@
+Compile the c files:
+$ gcc -o tcp_server_exe tcp_socket_server.c
+$ gcc -o tcp_client_exe tcp_socket_client.c
+
+run the server:
+$ ./tcp_server_exe
+
+run the client:
+$ ./tcp_client_exe
