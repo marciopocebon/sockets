@@ -1,4 +1,4 @@
-// atribui endereco ao socket
+// assign an address to a socket
 
 #include <stdio.h>
 #include <string.h>
@@ -19,5 +19,5 @@ int main(){
 	bind( sock_x25, (struct sockaddr *) &meu_end_x25, size_x25 );
 }
 
-// assinatura da funcao bind
-int bind( int descritor, struct sockaddr *endereco_memoria, int tamanho_bytes )
+// bind's type signature
+//int bind( int descritor, struct sockaddr *endereco_memoria, int tamanho_bytes )
