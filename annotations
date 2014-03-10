@@ -1,41 +1,27 @@
-*quando um programa que abre um socket, tem sua execucao terminada, o socket permanece aberto
+*when a program (which opened a socket) have its own connection closed, the socket remains opened.
 
-# removendo o arquivo apos sua execucao
-unlink()
-
-ENDERECOS
-- fisicos (/tmp/xyz_socket)
-	.cria um objeto (arquivo) no sistema
-- abstratos
-	.nao cria um objeto no sistema
-	.netstat mostra @ em enderecos abstratos
-
-# dominio de internet
-- pode construtir qualquer forma de comunicacao que utilize o protocolo TCP/IP
-	.FTP
-	.SMTP
-	.DNS
-	.HTTP
+Addresses
+	- physic (/tmp/xyz_socket)
+		.creates an object (file) on the system
+	- abstract
+		.does not creates an object on the system
+		.'@' stands for abstract addresses in netstat
+	# internet domain
+	- can be used to build any network communication that implements TCP/IP
+		.FTP
+		.SMTP
+		.DNS
+		.HTTP
 
 PF_INET (a.k.a INTERNET)
-- tambem eh utilizado em redes locais
-- socket responsavel por permitir acesso ao TCP/IP
-- mto utilizado para servicos remotos (internet)
+- it is also used in local network
+- the socket which provides access to TCP/IP
+- mainly used in remote services (e.g. internet)
 
-	EXEMPLO DE UTILIZACAO
-		estrutura
-		.host central
-		- controla todas *ACOES executadas pelos agentes
-		*ACOES -> envio de informacao de inventario, execucao de uma tarefa, etc
-		.agente 1
-		.agente 2
-		.agente 3
-		.agente N
-
-BYTE ORDER
-- forma que a CPU utiliza ARRANJOS para agrupar multiplos bytes de dados em inteiros de 16/32/N bits
-	ARRANJOS
-	.big-endian (padrao)
-	- bytes mais significativos ficam no comeco da cadeia
+Network Byte Order
+- how bytes of a data word are ordered within memory
+	Conventions
+	.big-endian (network's default)
+		- most significant bytes first
 	.little-endian
-	- bytes mais significativos ficam no final da cadeia
+		- least significant bytes first
