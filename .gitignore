@@ -1,1 +1,3 @@
-
+# ignores compiled files
+*
+!*.c
