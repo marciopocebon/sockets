@@ -1,3 +1,4 @@
+// make a SO call to get both host and domain name
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -6,28 +7,28 @@
 #include <unistd.h>
 
 int main(){
-	char *NomeHost;
-	char *NomeDominio;
-	int retorno;
+	char *HostName;
+	char *DomainName;
+	int returned;
 
-	NomeHost = malloc(sizeof(char)*100);
-	NomeDominio = malloc(sizeof(char)*100);
+	HostName = malloc(sizeof(char)*100);
+	DomainName = malloc(sizeof(char)*100);
 
-	retorno  = gethostname(NomeHost, 100);
-	if ( retorno == -1 ) {
-		printf("Erro ao obter nome do host!\n");
+	returned  = gethostname(HostName, 100);
+	if ( returned == -1 ) {
+		printf("Error getting hostname!\n");
 		exit(1);
 	}
 
-	// NIS - Network Information Service
-	retorno = getdomainname(NomeDominio, 100);
-	if ( retorno == -1 ) {
-		printf("Erro ao obter nome do dominio NIS!\n");
+	returned = getdomainname(DomainName, 100);
+	if ( returned == -1 ) {
+		// NIS - Network Information Service
+		printf("Error getting domain name NIS!\n");
 		exit(1);
 	}
 
-	printf("Nome do Host: %s\n", NomeHost);
-	printf("Nome do Dominio: %s\n", NomeDominio);
+	printf("Hostname: %s\n", HostName);
+	printf("Domainname: %s\n", DomainName);
 
 	exit(0);
 }

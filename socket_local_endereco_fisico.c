@@ -1,4 +1,4 @@
-// cria um socket local em loop infinito
+// open a local socket, within a physical address, in an infinite loop
 
 #include <stdio.h>
 #include <string.h>
@@ -7,23 +7,19 @@
 
 int main(){
 	int sockfd, size_local;
-	// caminho do socket / endereco do socket local
-	char caminho_do_arquivo[] = "/tmp/socket_local";
-	// estrutura que abriga o endereco para realizar a juncao com o socket atraves do bind
-	struct sockaddr_un EndLocal;
+	char file_path[] = "/tmp/socket_local";
+	struct sockaddr_un LocalAddr;
 
-	// armazena o descritor do arquivo
 	sockfd = socket( PF_LOCAL, SOCK_STREAM, 0 );
 
 	printf( "Socket descriptor: %d\n", sockfd );
 
-	// zera a estrutura de endereco, para nao ficar sujeira
-	memset( &EndLocal, 0, sizeof EndLocal );
+	memset( &LocalAddr, 0, sizeof LocalAddr );
 
-	EndLocal.sun_family = PF_LOCAL;
-	strcpy( EndLocal.sun_path, caminho_do_arquivo );
-	size_local = sizeof( EndLocal );
+	LocalAddr.sun_family = PF_LOCAL;
+	strcpy( LocalAddr.sun_path, file_path );
+	size_local = sizeof( LocalAddr );
 
-	bind( sockfd, (struct sockaddr *) & EndLocal, size_local );
+	bind( sockfd, (struct sockaddr *) & LocalAddr, size_local );
 	while(1);
 }

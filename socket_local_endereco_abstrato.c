@@ -1,4 +1,4 @@
-// cria um socket local em loop infinito
+// open a local socket, within a abstract address, in an infinite loop
 
 #include <stdio.h>
 #include <string.h>
@@ -7,26 +7,31 @@
 
 int main(){
 	int sockfd, size_local;
-	// caminho do socket / endereco do socket local
-	// seta o 1o byte como nulo e diz ao kernel que eh um endereco abstrato
-	char caminho_do_arquivo[] = "X-ABSTRATO-";
-	// estrutura que abriga o endereco para realizar a juncao com o socket atraves do bind
-	struct sockaddr_un EndLocal;
+	// socket's local address
+	char file_path[] = "X-ABSTRACT-";
+	// socket's address struct
+	struct sockaddr_un LocalAddr;
 
-	// armazena o descritor do arquivo
+	// file descriptor
 	sockfd = socket( PF_LOCAL, SOCK_STREAM, 0 );
 
+	// prints socket's file descriptor
 	printf( "Socket descriptor: %d\n", sockfd );
 
-	// zera a estrutura de endereco, para nao ficar sujeira
-	memset( &EndLocal, 0, sizeof EndLocal );
+	// zero the struct
+	memset( &LocalAddr, 0, sizeof LocalAddr );
 
-	EndLocal.sun_family = AF_LOCAL;
-	strcpy( EndLocal.sun_path, caminho_do_arquivo );
-	size_local = sizeof( EndLocal );
-	// substitui o caractere X por 0, tornando-o nulo e mantendo o endereco somente -ABSTRATO-
-	EndLocal.sun_path[0] = 0;
+	// assigns a socket family to the address struct
+	LocalAddr.sun_family = AF_LOCAL;
+	// assigns the file path to the address struct
+	strcpy( LocalAddr.sun_path, file_path );
+	// calculates struct length
+	size_local = sizeof( LocalAddr );
+	// replace X character by 0
+	LocalAddr.sun_path[0] = 0;
 
-	bind( sockfd, (struct sockaddr *) & EndLocal, size_local );
+	// assign an address to a socket
+	bind( sockfd, (struct sockaddr *) & LocalAddr, size_local );
+	
 	while(1);
 }
