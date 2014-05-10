@@ -1,5 +1,4 @@
-// se conecta a um server
-// e recebe mensagens
+// connects to a server and receive messages
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,41 +9,41 @@
 #include <time.h>
 
 int main(){
-	// endereco
-	struct sockaddr_in EndLocal;
-	// descritor, tamanho e retorno do connect
-	int sockfd, len, retorno;
-	// armazenarara o conteudo retornado
+	// socket's address
+	struct sockaddr_in LocalAddr;
+	// descriptor, socket's length and bind status
+	int sockfd, len, status;
+	// storages the received message from the server
 	char buffer[1000];
 
-	// abre o socket
+	// opens the socket
 	sockfd = socket(PF_INET, SOCK_STREAM, 0);
 
-	// tamanho do endereco atribuido ao socket
-	len = sizeof(EndLocal);
-	// cleanup
-	memset((struct sockaddr_in *)&(EndLocal), 0, len);
-	// dominio do socket
-	EndLocal.sin_family = PF_INET;
-	// porta
-	EndLocal.sin_port = htons(4040);
-	// endereco IP
-	EndLocal.sin_addr.s_addr = inet_addr("127.0.0.1");
+	len = sizeof(LocalAddr);
+	// memory cleanup
+	memset((struct sockaddr_in *)&(LocalAddr), 0, len);
+	// sets socket's domain/family
+	LocalAddr.sin_family = PF_INET;
+	// sets socket's port
+	LocalAddr.sin_port = htons(4040);
+	// sets an IP
+	LocalAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-	// tenta se conectar ao server
-	retorno = connect(sockfd, (struct sockaddr*)&EndLocal, len);
+	// try to connect to the server
+	status = connect(sockfd, (struct sockaddr*)&LocalAddr, len);
 
-	if ( retorno != 0 ) {
-		perror( "Não foi possível se conectar" );
+	// if the connection fails, exit
+	if ( status != 0 ) {
+		perror( "Could not connect to the server" );
 		exit(1);
 	}
 
-	// recebe a mensagem do server
+	// receives a message from the server
 	recv(sockfd, &buffer, sizeof(buffer), 0);
 
-	// loga a mensagem recebida
+	// prints the received message
 	printf("%s\n", buffer);
 
-	// fim do programa
+	// the end
 	exit(0);
 }

@@ -1,5 +1,5 @@
-// sobe um server na porta 4040
-// responde uma mensagem estatica
+// creates a socket to listen for connections on port 4040
+// sends a default message for connected peers
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,55 +9,53 @@
 #include <time.h>
 
 int main(){
-	// enderecos
-	struct sockaddr_in EndLocal, EndRemoto;
-	// descritores, retorno e lens
-	int sockfd_server, len, retorno;
-	int sockfd_cliente, lenRemoto;
-	// mensagem
+	// Both local and remote addresses
+	struct sockaddr_in LocalAddr, RemoteAddr;
+	// server and client descriptors, its length and bind status
+	int sockfd_server, lenServer, status;
+	int sockfd_cliente, lenRemote;
+	// exchanged message
 	char *buffer;
-
+	// allocate memory for the exchanged message
 	buffer = malloc(sizeof(char)*100);
+	buffer = "You have successfuly connected to the server at port: 4040\n";
 
-	// abre um socket
+	// opens the socket
 	sockfd_server = socket(PF_INET, SOCK_STREAM, 0);
 
 	// tamanho do endereco atribuido ao socket do server
-	len = sizeof(EndLocal);
-	// cleanup
-	memset((struct sockaddr_in *)&(EndLocal), 0, len);
-	// seta a familia/dominio/escopo do socket
-	EndLocal.sin_family = PF_INET;
-	// seta a porta que ficara escutando por conexoes
-	EndLocal.sin_port = htons(4040);
-	// seta o endereco IP
-	// EndLocal.sin_addr.s_addr = INADDR_ANY; // escuta qualquer IP/placa rede
-	EndLocal.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-	// atribui o endereco ao socket
-	retorno = bind(sockfd_server, (struct sockaddr*)&EndLocal, len);
+	lenServer = sizeof(LocalAddr);
+	// memory cleanup
+	memset((struct sockaddr_in *)&(LocalAddr), 0, lenServer);
+	// sets socket's domain/family
+	LocalAddr.sin_family = PF_INET;
+	// sets socket's port
+	LocalAddr.sin_port = htons(4040);
+	// sets an IP
+	LocalAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-	// caso erro, retorna
-	if ( retorno == -1 ) exit(0);
+	// assign an address to the socket
+	status = bind(sockfd_server, (struct sockaddr*)&LocalAddr, lenServer);
+
+	// if the assignment fails, exit
+	if ( status == -1 ) exit(0);
 
 	// escuta por conexoes
 	// 5 -> tamanho max. fila espera por uma conexao
+	// start listening for a maximum of 5 connections on the socket
 	listen(sockfd_server, 5);
 
-	// loga uma mensagem antes de comecar a processar conexoes
-	printf("%s\n", "Aguardando conexoes na porta:4040" );
+	printf("%s\n", "Socket listening on port: 4040" );
 
-	// loop infinito
 	while(1){
-		// bloqueia a execucao do programa, ate que exista um pedido de conexao por parte do cliente
-		sockfd_cliente = accept( sockfd_server, (struct sockaddr *) &EndRemoto, &lenRemoto );
+		// blocks the program execution until there's a client requesting for connection
+		sockfd_cliente = accept( sockfd_server, (struct sockaddr *) &RemoteAddr, &lenRemote );
 
-		// armazena uma string para ser enviada ao cliente
-		buffer = "Cliente se conectou no servidor!\n";
-		// envia para o cliente os dados, seguido do tamanho total de dados sendo enviados
-		// 0 -> opcional, flags
+		printf("%s\n", "New client connected on port: 4040");
+		// sends the buffered data to the client
 		send(sockfd_cliente, buffer, strlen(buffer), 0);
-		// fecha a conexao com o cliente
+		// closes the connection with the client
 		close(sockfd_cliente);
 	}
 }
