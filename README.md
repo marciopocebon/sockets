@@ -6,5 +6,6 @@
 
 # Todo
 - dns
-- multiple connections
+- handling multiple connections using fork
+- broadcast
 - etc...
